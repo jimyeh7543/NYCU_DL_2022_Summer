@@ -20,6 +20,14 @@ def kl_criterion(mu, logvar, args):
     KLD /= args.batch_size
     return KLD
 
+def kl_criterion_lp(mu1, logvar1, mu2, logvar2, args):
+    # KL( N(mu_1, sigma2_1) || N(mu_2, sigma2_2)) =
+    #   log( sqrt(
+    #
+    sigma1 = logvar1.mul(0.5).exp()
+    sigma2 = logvar2.mul(0.5).exp()
+    kld = torch.log(sigma2/sigma1) + (torch.exp(logvar1) + (mu1 - mu2)**2)/(2*torch.exp(logvar2)) - 1/2
+    return kld.sum() / args.batch_size
 
 def eval_seq(gt, pred):
     T = len(gt)
@@ -136,6 +144,18 @@ def plot_pred(seq, cond, modules, args, epoch, device):
         new_image.paste(gen_img, (i * ori_img.size[0], ori_img.size[1]))
     new_image.save(os.path.join("plot_pred_images", "{}.jpg".format(epoch)))
 
+def plot_pred_lp(seq, cond, modules, args, epoch, device):
+    if not os.path.exists("plot_pred_images"):
+        os.makedirs("plot_pred_images")
+    gen_seq = pred_lp(seq, cond, modules, args, device)
+    new_image = Image.new(mode="RGB", size=(gen_seq[0].shape[3] * len(gen_seq), gen_seq[0].shape[2] * 2))
+    for i in range(len(gen_seq)):
+        ori_img = tensor_to_pil_image(seq[i][0])
+        gen_img = tensor_to_pil_image(gen_seq[i][0])
+        new_image.paste(ori_img, (i * ori_img.size[0], 0))
+        new_image.paste(gen_img, (i * ori_img.size[0], ori_img.size[1]))
+    new_image.save(os.path.join("plot_pred_images", "{}.jpg".format(epoch)))
+
 
 def pred(x, cond, modules, args, device):
     modules['frame_predictor'].hidden = modules['frame_predictor'].init_hidden()
@@ -158,6 +178,34 @@ def pred(x, cond, modules, args, device):
             gen_seq.append(x[i])
         else:
             z_t = torch.randn(args.batch_size, args.z_dim).to(device)
+            h_pred = modules['frame_predictor'](torch.cat([h, z_t, cond[i - 1]], 1)).detach()
+            x_in = modules['decoder']([h_pred, skip]).detach()
+            gen_seq.append(x_in)
+    return gen_seq
+
+def pred_lp(x, cond, modules, args, device):
+    modules['frame_predictor'].hidden = modules['frame_predictor'].init_hidden()
+    modules['posterior'].hidden = modules['posterior'].init_hidden()
+    modules['prior'].hidden = modules['prior'].init_hidden()
+    gen_seq = [x[0]]
+    x_in = x[0]
+    for i in range(1, args.n_past + args.n_future):
+        h = modules['encoder'](x_in)
+        if args.last_frame_skip or i < args.n_past:
+            h, skip = h
+        else:
+            h, _ = h
+        h = h.detach()
+
+        if i < args.n_past:
+            h_target = modules['encoder'](x[i])[0].detach()
+            z_t, _, _ = modules['posterior'](h_target)
+            modules['prior'](h)
+            modules['frame_predictor'](torch.cat([h, z_t, cond[i - 1]], 1))
+            x_in = x[i]
+            gen_seq.append(x[i])
+        else:
+            z_t, _, _ = modules['prior'](h)
             h_pred = modules['frame_predictor'](torch.cat([h, z_t, cond[i - 1]], 1)).detach()
             x_in = modules['decoder']([h_pred, skip]).detach()
             gen_seq.append(x_in)
