@@ -29,3 +29,11 @@ Teacher: 彭文孝、吳毅成、陳永昇<br>
      82% accuracy.
   
 ---
+
+## Lab 4: Conditional VAE For Video Prediction
+    
+     In this lab, students are required to implement a conditional VAE for video prediction. Also 
+     students need to implement KL cost annealing, teacher forcing, dataloader, etc. The experiment 
+     result in cyclical can achieve 26.6 PSNR. Furthermore, I implemented prior extra part for your 
+     reference.
+---
