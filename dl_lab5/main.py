@@ -244,7 +244,7 @@ def select_best_model(args):
 
 def parse_args():
     parser = ArgumentParser()
-    parser.add_argument("--n_epochs", default=300, type=int)
+    parser.add_argument("--n_epochs", default=600, type=int)
     parser.add_argument("--batch_size", default=64, type=int)
     parser.add_argument("--n_classes", default=24, type=int)
     parser.add_argument("--nc", type=int, default=100, help="number of condition embedding dim")
@@ -257,8 +257,8 @@ def parse_args():
     parser.add_argument("--beta2", type=float, default=0.999, help="beta2 for adam. default=0.999")
     parser.add_argument('--result_folder', default="logs", help="folder to save result or log")
     parser.add_argument('--model_folder', default="logs/classifier", help="folder to save model")
-    parser.add_argument('--is_dcgan', default=True)
-    parser.add_argument('--aux_weight', default=100)
+    parser.add_argument('--is_dcgan', default=False)
+    parser.add_argument('--aux_weight', default=125)
     parser.add_argument("--n_gpu", type=int, default=1, help='number of GPUs to use')
     parser.add_argument("--device", default="cuda:1", type=str)
     return parser.parse_args()
