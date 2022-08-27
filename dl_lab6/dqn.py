@@ -199,6 +199,7 @@ def test(args, env, agent, writer):
                 break
 
     print('Average Reward', np.mean(rewards))
+    print('Average Reward/30:', round(np.mean(rewards) / 30.0, 2))
     env.close()
 
 
