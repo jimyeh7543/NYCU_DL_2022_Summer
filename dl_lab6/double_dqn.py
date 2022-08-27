@@ -49,7 +49,7 @@ class Net(nn.Module):
         return self.main(x)
 
 
-class DoubleDQN:
+class DoubleDqn:
     def __init__(self, args):
         self._behavior_net = Net().to(args.device)
         self._target_net = Net().to(args.device)
@@ -205,7 +205,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('-d', '--device', default='cuda:6')
     parser.add_argument('-m', '--model', default='double_dqn.pth')
-    parser.add_argument('--logdir', default='log/dqn')
+    parser.add_argument('--logdir', default='log/double_dqn')
     # train
     parser.add_argument('--warmup', default=10000, type=int)
     parser.add_argument('--episode', default=1200, type=int)
@@ -226,7 +226,7 @@ def main():
 
     ## main ##
     env = gym.make('LunarLander-v2')
-    agent = DoubleDQN(args)
+    agent = DoubleDqn(args)
     writer = SummaryWriter(args.logdir)
     if not args.test_only:
         train(args, env, agent, writer)
