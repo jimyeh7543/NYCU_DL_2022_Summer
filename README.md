@@ -37,3 +37,12 @@ Teacher: 彭文孝、吳毅成、陳永昇<br>
      The experiment result in cyclical can achieve 26.6 PSNR. Furthermore, I implemented prior 
      extra part for your reference.
 ---
+
+## Lab 5: Let’s Play GANs
+    
+     In this lab, students are required to implement a conditional GAN to generate synthetic
+     images according to multi-label conditions. For example, given “red cube” and “blue cylinder”, 
+     model should generate the synthetic images with red cube and blue cylinder. Meanwhile, generated 
+     images would be feed into a pre-trained classifier for evaluation. The experiment results can 
+     achieve 84.7% accuracy on test.json and 91.7% accuracy on new_test.json.
+---
