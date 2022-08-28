@@ -202,7 +202,7 @@ class Td3:
             }, model_path)
 
     def load(self, model_path):
-        model = torch.load(model_path)
+        model = torch.load(model_path, map_location=self.device)
         self._actor_net.load_state_dict(model['actor'])
         self._critic_net_1.load_state_dict(model['critic_1'])
         self._critic_net_2.load_state_dict(model['critic_2'])
@@ -278,7 +278,7 @@ def main():
     parser.add_argument('--logdir', default='log/td3')
     # train
     parser.add_argument('--warmup', default=10000, type=int)
-    parser.add_argument('--episode', default=2000, type=int)
+    parser.add_argument('--episode', default=1200, type=int)
     parser.add_argument('--batch_size', default=64, type=int)
     parser.add_argument('--capacity', default=500000, type=int)
     parser.add_argument('--lra', default=1e-3, type=float)

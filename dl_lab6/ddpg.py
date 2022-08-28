@@ -202,7 +202,7 @@ class DDPG:
                 }, model_path)
 
     def load(self, model_path, checkpoint=False):
-        model = torch.load(model_path)
+        model = torch.load(model_path, map_location=self.device)
         self._actor_net.load_state_dict(model['actor'])
         self._critic_net.load_state_dict(model['critic'])
         if checkpoint:
