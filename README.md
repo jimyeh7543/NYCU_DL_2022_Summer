@@ -49,9 +49,9 @@ Teacher: 彭文孝、吳毅成、陳永昇<br>
 
 ## Lab 6: Deep Q-Network and Deep Deterministic Policy Gradient
     
-     In this lab, students will learn and implement two deep reinforcement algorithms by completing 
-     the following two tasks: (1) solve LunarLander-v2 using DQN, and (2) solve LunarLanderContinuous-v2 
-     using DDPG. The experiment results can achieve 305 average reward on LunarLander-v2 by DQN, and 304 
-     average reward on LunarLanderContinuous-v2 by TD3. Furthermore, I implemented all the extra parts for 
-     your reference.
+     In this lab, students will learn and implement two deep reinforcement algorithms by 
+     completing the following two tasks: (1) solve LunarLander-v2 using DQN, and (2) solve 
+     LunarLanderContinuous-v2 using DDPG. The experiment results can achieve 305 average 
+     reward on LunarLander-v2 by DQN, and 308 average reward on LunarLanderContinuous-v2 by 
+     TD3. Furthermore, I implemented all the extra parts for your reference.
 ---
